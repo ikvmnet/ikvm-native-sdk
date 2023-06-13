@@ -131,41 +131,40 @@ jobs:
     - build-macosx
     runs-on: ubuntu-latest
     steps:
-
     - name: Download Windows SDK
       uses: actions/download-artifact@v3
       with:
-        name: windows.tar.gz
+        name: windows
         path: dist
     - name: Download Linux SDK (x86_64-unknown-linux-gnu)
       uses: actions/download-artifact@v3
       with:
-        name: linux--x86_64-unknown-linux-gnu.tar.gz
+        name: linux--x86_64-unknown-linux-gnu
         path: dist
     - name: Download Linux SDK (x86_64-unknown-linux-musl)
       uses: actions/download-artifact@v3
       with:
-        name: linux--x86_64-unknown-linux-musl.tar.gz
+        name: linux--x86_64-unknown-linux-musl
         path: dist
     - name: Download Linux SDK (aarch64-unknown-linux-gnu)
       uses: actions/download-artifact@v3
       with:
-        name: linux--aarch64-unknown-linux-gnu.tar.gz
+        name: linux--aarch64-unknown-linux-gnu
         path: dist
     - name: Download Linux SDK (aarch64-unknown-linux-musl)
       uses: actions/download-artifact@v3
       with:
-        name: linux--aarch64-unknown-linux-musl.tar.gz
+        name: linux--aarch64-unknown-linux-musl
         path: dist
     - name: Download Linux SDK (arm-unknown-linux-gnueabihf)
       uses: actions/download-artifact@v3
       with:
-        name: linux--arm-unknown-linux-gnueabihf.tar.gz
+        name: linux--arm-unknown-linux-gnueabihf
         path: dist
     - name: Download Linux SDK (arm-unknown-linux-musleabihf)
       uses: actions/download-artifact@v3
       with:
-        name: linux--arm-unknown-linux-musleabihf.tar.gz
+        name: linux--arm-unknown-linux-musleabihf
         path: dist
     - name: Create Release
       if: github.ref_type == 'tag'
