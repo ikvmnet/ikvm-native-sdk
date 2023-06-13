@@ -18,9 +18,10 @@ fi
 
 # common directories
 home=$sdk/$target
-dist=$(dirname $sdk)dist/linux-$target
+dist=$(dirname $sdk)/dist/linux/$target
 root=$home/root
 
+echo $dist
 # include ct-nt variable
 source $home/sdk.config
 
