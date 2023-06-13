@@ -64,7 +64,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: dist/linux/${{ matrix.target }}
-        key: dist--linux--${{ matrix.target }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', '/linux/*/.config', '/linux/*/sdk.config') }}-1
+        key: dist--linux--${{ matrix.target }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
     - name: Check
       id: dist-linux-stamp
       uses: andstor/file-existence-action@v2
