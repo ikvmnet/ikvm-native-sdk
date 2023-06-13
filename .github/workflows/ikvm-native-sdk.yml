@@ -19,8 +19,8 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: windows
-        key: windows--${{ runner.os }}--${{ hashFiles('windows/build.sh') }}-2
+        path: dist/windows
+        key: dist--windows--${{ runner.os }}--${{ hashFiles('windows/build.sh') }}-2
     - name: Check
       id: dist-stamp
       uses: andstor/file-existence-action@v2
@@ -131,25 +131,48 @@ jobs:
     - build-macosx
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v3
+
+    - name: Download Windows SDK
+      uses: actions/download-artifact@v3
       with:
-        fetch-depth: 0
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
+        name: windows.tar.gz
+        path: dist
+    - name: Download Linux SDK (x86_64-unknown-linux-gnu)
+      uses: actions/download-artifact@v3
       with:
-        versionSpec: 5.x
-    - name: Execute GitVersion
-      id: GitVersion
-      uses: gittools/actions/gitversion/execute@v0
+        name: linux--x86_64-unknown-linux-gnu.tar.gz
+        path: dist
+    - name: Download Linux SDK (x86_64-unknown-linux-musl)
+      uses: actions/download-artifact@v3
       with:
-        useConfigFile: true
+        name: linux--x86_64-unknown-linux-musl.tar.gz
+        path: dist
+    - name: Download Linux SDK (aarch64-unknown-linux-gnu)
+      uses: actions/download-artifact@v3
+      with:
+        name: linux--aarch64-unknown-linux-gnu.tar.gz
+        path: dist
+    - name: Download Linux SDK (aarch64-unknown-linux-musl)
+      uses: actions/download-artifact@v3
+      with:
+        name: linux--aarch64-unknown-linux-musl.tar.gz
+        path: dist
+    - name: Download Linux SDK (arm-unknown-linux-gnueabihf)
+      uses: actions/download-artifact@v3
+      with:
+        name: linux--arm-unknown-linux-gnueabihf.tar.gz
+        path: dist
+    - name: Download Linux SDK (arm-unknown-linux-musleabihf)
+      uses: actions/download-artifact@v3
+      with:
+        name: linux--arm-unknown-linux-musleabihf.tar.gz
+        path: dist
     - name: Create Release
       if: github.ref_type == 'tag'
       uses: ncipollo/release-action@v1.10.0
       with:
         tag: ${{ github.ref_name }}
         allowUpdates: true
-        artifacts: dist/nuget/*.nupkg,dist/bin/*.zip,dist/bin/*.tar.gz,dist/image/*.zip,dist/image/*.tar.gz,dist/tools/*.zip,dist/tools/*.tar.gz
+        artifacts: dist/*.tar.gz
         draft: false
         token: ${{ secrets.GITHUB_TOKEN }}
