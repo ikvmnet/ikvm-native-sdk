@@ -7,9 +7,6 @@ on:
   pull_request:
     branches:
     - main
-  release:
-    types:
-    - created
 
 jobs:
   build-windows:
@@ -28,23 +25,23 @@ jobs:
       id: dist-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: windows/dist/stamp
+        files: dist/windows/stamp
     - name: Install
-      if: steps.dist-stamp.outputs.files_exists != 'true'
+      if: steps.dist-windows-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl wget
     - name: Build
-      if: steps.dist-stamp.outputs.files_exists != 'true'
-      run: windows/build.sh && touch windows/dist/stamp
+      if: steps.dist-windows-stamp.outputs.files_exists != 'true'
+      run: windows/build.sh && touch dist/windows/stamp
     - name: Package
-      run: tar czvf /tmp/windows--dist.tar.gz dist
-      working-directory: windows
+      run: tar czvf /tmp/windows.tar.gz windows
+      working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: windows--dist
-        path: /tmp/windows--dist.tar.gz
+        name: windows
+        path: /tmp/windows.tar.gz
   build-linux:
     strategy:
       matrix:
@@ -66,15 +63,15 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: linux/${{ matrix.target }}
-        key: linux--${{ matrix.target }}--dist--${{ runner.os }}--${{ hashFiles('linux/build.sh', '/linux/*.dir/.config') }}-1
+        path: dist/linux/${{ matrix.target }}
+        key: dist--linux--${{ matrix.target }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', '/linux/*/.config', '/linux/*/sdk.config') }}-1
     - name: Check
-      id: dist-stamp
+      id: dist-linux-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: linux/${{ matrix.target }}/dist/stamp
+        files: dist/linux/${{ matrix.target }}/stamp
     - name: Install
-      if: steps.dist-stamp.outputs.files_exists != 'true'
+      if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y \
@@ -83,16 +80,16 @@ jobs:
           ninja-build zip unzip curl wget \
           help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo
     - name: Build
-      if: steps.dist-stamp.outputs.files_exists != 'true'
-      run: linux/build.sh ${{ matrix.target }} && touch linux/${{ matrix.target }}/dist/stamp
+      if: steps.dist-linux-stamp.outputs.files_exists != 'true'
+      run: linux/build.sh ${{ matrix.target }} && touch dist/linux/${{ matrix.target }}/stamp
     - name: Package
-      run: tar czvf /tmp/linux--${{ matrix.target }}--dist.tar.gz dist
-      working-directory: linux/${{ matrix.target }}
+      run: tar czvf /tmp/linux-${{ matrix.target }}.tar.gz linux-${{ matrix.target }}
+      working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: linux--${{ matrix.target }}--dist
-        path: /tmp/linux--${{ matrix.target }}--dist.tar.gz
+        name: linux-${{ matrix.target }}
+        path: /tmp/linux-${{ matrix.target }}.tar.gz
   build-macosx:
     name: Build Mac OS X SDK
     runs-on: ubuntu-latest
@@ -103,29 +100,29 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: macosx/dist
-        key: macosx--dist--${{ runner.os }}--${{ hashFiles('macosx/build.sh') }}-1
+        path: dist/macosx
+        key: dist--macosx--${{ runner.os }}--${{ hashFiles('macosx/build.sh') }}-1
     - name: Check
-      id: dist-stamp
+      id: dist-macosx-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: macosx/dist/stamp
+        files: dist/macosx/stamp
     - name: Install
-      if: steps.dist-stamp.outputs.files_exists != 'true'
+      if: steps.dist-macosx-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl
     - name: Build
-      if: steps.dist-stamp.outputs.files_exists != 'true'
-      run: macosx/build.sh && touch macosx/dist/stamp
+      if: steps.dist-macosx-stamp.outputs.files_exists != 'true'
+      run: macosx/build.sh && touch dist/macosx/stamp
     - name: Package
-      run: tar czvf /tmp/macosx--dist.tar.gz dist
-      working-directory: macosx
+      run: tar czvf /tmp/macosx.tar.gz macosx
+      working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: macosx--dist
-        path: /tmp/macosx--dist.tar.gz
+        name: macosx
+        path: /tmp/macosx.tar.gz
   release:
     name: Release
     needs:

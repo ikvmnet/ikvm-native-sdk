@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 export sdk=$(dirname $(readlink -f $0))
-export ext=$(dirname $sdk)/../ext
+export ext=$(dirname $sdk)/ext
 
 # if not passed a target, recurse into available targets
 target=$1
@@ -18,7 +18,7 @@ fi
 
 # common directories
 home=$sdk/$target
-dist=$home/dist
+dist=$(dirname $sdk)dist/linux-$target
 root=$home/root
 
 # include ct-nt variable
