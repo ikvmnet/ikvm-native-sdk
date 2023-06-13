@@ -83,13 +83,13 @@ jobs:
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: linux/build.sh ${{ matrix.target }} && touch dist/linux/${{ matrix.target }}/stamp
     - name: Package
-      run: tar czvf /tmp/linux-${{ matrix.target }}.tar.gz linux/${{ matrix.target }}
+      run: tar czvf /tmp/linux--${{ matrix.target }}.tar.gz linux/${{ matrix.target }}
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: linux-${{ matrix.target }}
-        path: /tmp/linux-${{ matrix.target }}.tar.gz
+        name: linux--${{ matrix.target }}
+        path: /tmp/linux--${{ matrix.target }}.tar.gz
   build-macosx:
     name: Build Mac OS X SDK
     runs-on: ubuntu-latest
