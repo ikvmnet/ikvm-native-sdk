@@ -88,7 +88,7 @@ then
 			--with-sysroot=$root \
 			--with-headers=$dist/include \
 			--disable-nls --disable-multilib --disable-selinux --disable-profile --disable-tunables
-		make
+		make -j
 		make DESTDIR=$dist install
 		touch stamp
 		popd
@@ -113,7 +113,7 @@ then
 			--with-native-system-header-dir=/include \
 			--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
 			$SDK_GCC_ARGS
-		make all-target-libgcc all-target-libstdc++-v3
+		make -j all-target-libgcc all-target-libstdc++-v3
 		make DESTDIR=$dist install-target-libgcc install-target-libstdc++-v3
 		touch stamp
 		popd
