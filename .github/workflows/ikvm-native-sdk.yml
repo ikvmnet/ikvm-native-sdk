@@ -169,6 +169,11 @@ jobs:
       with:
         name: linux--arm-unknown-linux-musleabihf
         path: dist
+    - name: Download Mac OS X SDK
+      uses: actions/download-artifact@v3
+      with:
+        name: macosx
+        path: dist
     - name: Create Release
       if: github.ref_type == 'tag'
       uses: ncipollo/release-action@v1.10.0
