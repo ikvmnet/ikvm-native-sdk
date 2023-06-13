@@ -22,7 +22,7 @@ jobs:
         path: dist/windows
         key: dist--windows--${{ runner.os }}--${{ hashFiles('windows/build.sh') }}-2
     - name: Check
-      id: dist-stamp
+      id: dist-windows-stamp
       uses: andstor/file-existence-action@v2
       with:
         files: dist/windows/stamp
