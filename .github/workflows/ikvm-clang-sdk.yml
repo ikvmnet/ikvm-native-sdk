@@ -1,0 +1,156 @@
+name: ikvm-native-sdk
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  release:
+    types:
+    - created
+
+jobs:
+  build-windows:
+    name: Build Windows SDK
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Cache
+      uses: actions/cache@v3
+      with:
+        path: windows
+        key: windows--${{ runner.os }}--${{ hashFiles('windows/build.sh') }}-2
+    - name: Check
+      id: dist-stamp
+      uses: andstor/file-existence-action@v2
+      with:
+        files: windows/dist/stamp
+    - name: Install
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y zip unzip curl wget
+    - name: Build
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: windows/build.sh && touch windows/dist/stamp
+    - name: Package
+      run: tar czvf /tmp/windows--dist.tar.gz dist
+      working-directory: windows
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows--dist
+        path: /tmp/windows--dist.tar.gz
+  build-linux:
+    strategy:
+      matrix:
+        target:
+        - x86_64-unknown-linux-gnu
+        - x86_64-unknown-linux-musl
+        - aarch64-unknown-linux-gnu
+        - aarch64-unknown-linux-musl
+        - arm-unknown-linux-gnueabihf
+        - arm-unknown-linux-musleabihf
+    name: Build Linux SDK (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Cache
+      uses: actions/cache@v3
+      with:
+        path: linux/${{ matrix.target }}
+        key: linux--${{ matrix.target }}--dist--${{ runner.os }}--${{ hashFiles('linux/build.sh', '/linux/*.dir/.config') }}-1
+    - name: Check
+      id: dist-stamp
+      uses: andstor/file-existence-action@v2
+      with:
+        files: linux/${{ matrix.target }}/dist/stamp
+    - name: Install
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y \
+          build-essential \
+          gcc g++ \
+          ninja-build zip unzip curl wget \
+          help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo
+    - name: Build
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: linux/build.sh ${{ matrix.target }} && touch linux/${{ matrix.target }}/dist/stamp
+    - name: Package
+      run: tar czvf /tmp/linux--${{ matrix.target }}--dist.tar.gz dist
+      working-directory: linux/${{ matrix.target }}
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux--${{ matrix.target }}--dist
+        path: /tmp/linux--${{ matrix.target }}--dist.tar.gz
+  build-macosx:
+    name: Build Mac OS X SDK
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Cache
+      uses: actions/cache@v3
+      with:
+        path: macosx/dist
+        key: macosx--dist--${{ runner.os }}--${{ hashFiles('macosx/build.sh') }}-1
+    - name: Check
+      id: dist-stamp
+      uses: andstor/file-existence-action@v2
+      with:
+        files: macosx/dist/stamp
+    - name: Install
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y zip unzip curl
+    - name: Build
+      if: steps.dist-stamp.outputs.files_exists != 'true'
+      run: macosx/build.sh && touch macosx/dist/stamp
+    - name: Package
+      run: tar czvf /tmp/macosx--dist.tar.gz dist
+      working-directory: macosx
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: macosx--dist
+        path: /tmp/macosx--dist.tar.gz
+  release:
+    name: Release
+    needs:
+    - test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: 5.x
+    - name: Execute GitVersion
+      id: GitVersion
+      uses: gittools/actions/gitversion/execute@v0
+      with:
+        useConfigFile: true
+    - name: Create Release
+      if: github.ref_type == 'tag'
+      uses: ncipollo/release-action@v1.10.0
+      with:
+        tag: ${{ github.ref_name }}
+        allowUpdates: true
+        artifacts: dist/nuget/*.nupkg,dist/bin/*.zip,dist/bin/*.tar.gz,dist/image/*.zip,dist/image/*.tar.gz,dist/tools/*.zip,dist/tools/*.tar.gz
+        draft: false
+        token: ${{ secrets.GITHUB_TOKEN }}
