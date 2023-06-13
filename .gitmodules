@@ -23,3 +23,8 @@
 	url = https://github.com/torvalds/linux.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/osxcross"]
+	path = ext/osxcross
+	url = https://github.com/tpoechtrager/osxcross.git
+	ignore = dirty
+	shallow = true
