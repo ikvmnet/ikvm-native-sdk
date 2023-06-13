@@ -113,7 +113,7 @@ then
 			--with-native-system-header-dir=/include \
 			--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
 			$SDK_GCC_ARGS
-		make -j all-target-libgcc all-target-libstdc++-v3
+		make all-target-libgcc all-target-libstdc++-v3
 		make DESTDIR=$dist install-target-libgcc install-target-libstdc++-v3
 		touch stamp
 		popd
