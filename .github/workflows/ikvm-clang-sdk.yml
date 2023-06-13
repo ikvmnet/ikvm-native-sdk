@@ -129,7 +129,9 @@ jobs:
   release:
     name: Release
     needs:
-    - test
+    - build-windows
+    - build-linux
+    - build-macosx
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Source
