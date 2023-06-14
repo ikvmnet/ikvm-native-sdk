@@ -182,4 +182,5 @@ jobs:
         allowUpdates: true
         artifacts: dist/*.tar.gz
         draft: false
+        makeLatest: true
         token: ${{ secrets.GITHUB_TOKEN }}
