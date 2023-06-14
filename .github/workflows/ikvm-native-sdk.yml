@@ -127,6 +127,7 @@ jobs:
         name: macosx
         path: /tmp/macosx.tar.gz
   release:
+    if: github.event_name != 'pull_request'
     name: Release
     needs:
     - build-windows
