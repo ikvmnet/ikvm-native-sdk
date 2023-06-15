@@ -13,4 +13,4 @@ case "$(uname -s)" in
 esac
 
 curl --fail -L https://github.com/Jake-Shadle/xwin/releases/download/$xwin_version/$xwin_prefix.tar.gz | tar -xzv -C $bin --strip-components=1 $xwin_prefix/xwin
-$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --output $dist
+$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --preserve-ms-arch-notation --output $dist
