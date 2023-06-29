@@ -81,7 +81,7 @@ jobs:
           build-essential \
           gcc g++ \
           ninja-build zip unzip curl wget \
-          help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo
+          help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo symlinks
     - name: Build
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: linux/build.sh ${{ matrix.target }} && touch dist/linux/${{ matrix.target }}/stamp
