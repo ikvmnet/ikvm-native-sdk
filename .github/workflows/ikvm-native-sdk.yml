@@ -38,7 +38,7 @@ jobs:
       if: steps.dist-windows-stamp.outputs.files_exists != 'true'
       run: windows/build.sh && touch dist/windows/stamp
     - name: Package
-      run: tar czvhf /tmp/windows.tar.gz windows
+      run: tar czvf /tmp/windows.tar.gz windows
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
@@ -86,7 +86,7 @@ jobs:
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: linux/build.sh ${{ matrix.target }} && touch dist/linux/${{ matrix.target }}/stamp
     - name: Package
-      run: tar czvhf /tmp/linux--${{ matrix.target }}.tar.gz linux/${{ matrix.target }}
+      run: tar czvf /tmp/linux--${{ matrix.target }}.tar.gz linux/${{ matrix.target }}
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
