@@ -142,5 +142,8 @@ then
 	fi
 fi
 
+# adjust symlinks to relative paths
+symlinks -cr $dist
+
 # remove unused directories
 rm -rf $dist/bin $dist/etc $dist/libexec $dist/sbin $dist/share $dist/var
