@@ -119,7 +119,7 @@ jobs:
       if: steps.dist-macosx-stamp.outputs.files_exists != 'true'
       run: macosx/build.sh && touch dist/macosx/stamp
     - name: Package
-      run: tar --exclude=macosx/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby --exclude=macosx/System/Library/Frameworks/Ruby.framework/Versions/Current/Headers/ruby/ruby -czvhf /tmp/macosx.tar.gz macosx
+      run: tar czvhf /tmp/macosx.tar.gz macosx
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
