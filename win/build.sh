@@ -2,7 +2,7 @@
 
 xwin_version="0.2.12"
 
-dist="$(dirname "$0")/../dist/windows"
+dist="$(dirname "$0")/../dist/win"
 bin="$(dirname "$0")/bin"
 mkdir -p $sdk $bin
 

@@ -12,8 +12,8 @@ on:
     - created
 
 jobs:
-  build-windows:
-    name: Build Windows SDK
+  build-win:
+    name: Build (win)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -22,29 +22,29 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: dist/windows
-        key: dist--windows--${{ runner.os }}--${{ hashFiles('windows/build.sh') }}-2
+        path: dist/win
+        key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-2
     - name: Check
-      id: dist-windows-stamp
+      id: dist-win-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: dist/windows/stamp
+        files: dist/win/stamp
     - name: Install
-      if: steps.dist-windows-stamp.outputs.files_exists != 'true'
+      if: steps.dist-win-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl wget
     - name: Build
-      if: steps.dist-windows-stamp.outputs.files_exists != 'true'
-      run: windows/build.sh && touch dist/windows/stamp
+      if: steps.dist-win-stamp.outputs.files_exists != 'true'
+      run: win/build.sh && touch dist/win/stamp
     - name: Package
-      run: tar czvf /tmp/windows.tar.gz windows
+      run: tar czvf /tmp/win.tar.gz win
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: windows
-        path: /tmp/windows.tar.gz
+        name: win
+        path: /tmp/win.tar.gz
   build-linux:
     strategy:
       matrix:
@@ -55,7 +55,7 @@ jobs:
         - linux-musl-arm
         - linux-arm64
         - linux-musl-arm64
-    name: Build Linux SDK (${{ matrix.rid }})
+    name: Build (${{ matrix.rid }})
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -66,13 +66,13 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: dist/linux/${{ matrix.rid }}
-        key: dist--linux--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
+        path: dist/${{ matrix.rid }}
+        key: dist--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
     - name: Check
       id: dist-linux-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: dist/linux/${{ matrix.rid }}/stamp
+        files: dist/${{ matrix.rid }}/stamp
     - name: Install
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: |
@@ -84,17 +84,17 @@ jobs:
           help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo symlinks
     - name: Build
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
-      run: linux/build.sh ${{ matrix.rid }} && touch dist/linux/${{ matrix.rid }}/stamp
+      run: linux/build.sh ${{ matrix.rid }} && touch dist/${{ matrix.rid }}/stamp
     - name: Package
-      run: tar czvf /tmp/linux--${{ matrix.rid }}.tar.gz linux/${{ matrix.rid }}
+      run: tar czvf /tmp/${{ matrix.rid }}.tar.gz ${{ matrix.rid }}
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: linux--${{ matrix.rid }}
-        path: /tmp/linux--${{ matrix.rid }}.tar.gz
-  build-macosx:
-    name: Build Mac OS X SDK
+        name: ${{ matrix.rid }}
+        path: /tmp/${{ matrix.rid }}.tar.gz
+  build-osx:
+    name: Build (osx)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -103,77 +103,77 @@ jobs:
     - name: Cache
       uses: actions/cache@v3
       with:
-        path: dist/macosx
-        key: dist--macosx--${{ runner.os }}--${{ hashFiles('macosx/build.sh') }}-1
+        path: dist/osx
+        key: dist--osx--${{ runner.os }}--${{ hashFiles('osx/build.sh') }}-1
     - name: Check
-      id: dist-macosx-stamp
+      id: dist-osx-stamp
       uses: andstor/file-existence-action@v2
       with:
-        files: dist/macosx/stamp
+        files: dist/osx/stamp
     - name: Install
-      if: steps.dist-macosx-stamp.outputs.files_exists != 'true'
+      if: steps.dist-osx-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl
     - name: Build
-      if: steps.dist-macosx-stamp.outputs.files_exists != 'true'
-      run: macosx/build.sh && touch dist/macosx/stamp
+      if: steps.dist-osx-stamp.outputs.files_exists != 'true'
+      run: osx/build.sh && touch dist/osx/stamp
     - name: Package
-      run: tar czvhf /tmp/macosx.tar.gz macosx
+      run: tar czvhf /tmp/osx.tar.gz osx
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: macosx
-        path: /tmp/macosx.tar.gz
+        name: osx
+        path: /tmp/osx.tar.gz
   release:
     name: Release
     if: github.event_name != 'pull_request'
     needs:
-    - build-windows
+    - build-win
     - build-linux
-    - build-macosx
+    - build-osx
     runs-on: ubuntu-latest
     steps:
-    - name: Download Windows SDK
+    - name: Download (win)
       uses: actions/download-artifact@v3
       with:
-        name: windows
+        name: win
         path: dist
-    - name: Download Linux SDK (linux-x64)
+    - name: Download (linux-x64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-x64
+        name: linux-x64
         path: dist
-    - name: Download Linux SDK (linux-musl-x64)
+    - name: Download (linux-musl-x64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-musl-x64
+        name: linux-musl-x64
         path: dist
-    - name: Download Linux SDK (linux-arm64)
+    - name: Download (linux-arm64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-arm64
+        name: linux-arm64
         path: dist
-    - name: Download Linux SDK (linux-musl-arm64)
+    - name: Download (linux-musl-arm64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-musl-arm64
+        name: linux-musl-arm64
         path: dist
-    - name: Download Linux SDK (linux-arm)
+    - name: Download (linux-arm)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-arm
+        name: linux-arm
         path: dist
-    - name: Download Linux SDK (linux-musl-arm)
+    - name: Download (linux-musl-arm)
       uses: actions/download-artifact@v3
       with:
-        name: linux--linux-musl-arm
+        name: linux-musl-arm
         path: dist
-    - name: Download Mac OS X SDK
+    - name: Download (osx)
       uses: actions/download-artifact@v3
       with:
-        name: macosx
+        name: osx
         path: dist
     - name: Create Release
       if: github.ref_type == 'tag'

@@ -18,7 +18,7 @@ fi
 
 # common directories
 home=$sdk/$rid
-dist=$(dirname $sdk)/dist/linux/$rid
+dist=$(dirname $sdk)/dist/$rid
 root=$home/root
 
 echo $dist
