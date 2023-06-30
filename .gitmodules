@@ -28,3 +28,8 @@
 	url = https://github.com/tpoechtrager/osxcross.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/fontconfig"]
+	path = ext/fontconfig
+	url = https://gitlab.freedesktop.org/fontconfig/fontconfig.git
+	ignore = dirty
+	shallow = true

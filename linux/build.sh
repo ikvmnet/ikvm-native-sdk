@@ -75,7 +75,7 @@ then
 			CFLAGS="-O2" \
 			--host=$SDK_TARGET \
 			--target=$SDK_TARGET \
-			--prefix="." \
+			--prefix="" \
 			--with-sysroot=$root \
 			--with-headers=$dist/include \
 			--disable-nls --disable-multilib --disable-selinux --disable-profile --disable-tunables
@@ -96,10 +96,10 @@ then
 		mkdir -p $home/gcc
 		pushd $home/gcc
 		$ext/gcc/configure \
-			CFLAGS="-O2" \
+			CFLAGS="-O0" \
 			--host=$SDK_TARGET \
 			--target=$SDK_TARGET \
-			--prefix="." \
+			--prefix="" \
 			--with-sysroot=$dist \
 			--with-native-system-header-dir=/include \
 			--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
@@ -121,16 +121,35 @@ then
 		pushd $home/musl
 		$ext/musl/configure \
 			CROSS_COMPILE=$SDK_TARGET- \
-			CFLAGS="-O2" \
+			CFLAGS="-O0" \
 			--host=$SDK_TARGET \
 			--target=$SDK_TARGET \
-			--prefix="." \
+			--prefix="" \
 			$SDK_MUSL_ARGS
 		make
 		make DESTDIR=$dist install
+		ln -sf libc.so $dist/lib/ld-musl*
 		touch stamp
 		popd
 	fi
+fi
+
+# build fontconfig
+if [ ! -f $home/fontconfig/stamp ]
+then
+	mkdir -p $home/fontconfig
+	pushd $home/fontconfig
+	$ext/fontconfig/autogen.sh \
+		CFLAGS="-O0" \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_FONTCONFIG_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
 fi
 
 # adjust symlinks to relative paths

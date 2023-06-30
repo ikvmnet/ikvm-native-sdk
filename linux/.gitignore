@@ -8,6 +8,7 @@ crosstool-ng
 */gcc
 */glibc
 */musl
+*/fontconfig
 */include
 */stamp
 */ct-ng-stamp
