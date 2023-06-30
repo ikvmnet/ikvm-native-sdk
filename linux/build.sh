@@ -4,8 +4,8 @@ export sdk=$(dirname $(readlink -f $0))
 export ext=$(dirname $sdk)/ext
 
 # if not passed a target, recurse into available targets
-target=$1
-if [ -z "$target" ]
+rid=$1
+if [ -z "$rid" ]
 then
 	pushd $sdk
 	for i in $(ls */sdk.config | cut -d'/' -f1);
@@ -17,28 +17,19 @@ then
 fi
 
 # common directories
-home=$sdk/$target
-dist=$(dirname $sdk)/dist/linux/$target
+home=$sdk/$rid
+dist=$(dirname $sdk)/dist/linux/$rid
 root=$home/root
 
 echo $dist
 # include ct-nt variable
 source $home/sdk.config
 
-# install dist kernel headers
-# translate target into kernel arch name
-case "${target%%-*}" in
-	x86_64) kernel_arch="x86";;
-	i686) kernel_arch="x86";;
-	arm*) kernel_arch="arm";;
-	aarch64) kernel_arch="arm64";;
-esac
-
 # copy Linux headers for distribution
 if [ ! -f $home/linux/stamp ]
 then
 	pushd $ext/linux
-	make headers_install ARCH=$kernel_arch INSTALL_HDR_PATH=$home/linux
+	make headers_install ARCH=$SDK_KERNEL_ARCH INSTALL_HDR_PATH=$home/linux
 	popd
 	pushd $home/linux
 	mkdir -p $dist/include
@@ -82,9 +73,9 @@ then
 		pushd $home/glibc
 		$ext/glibc/configure \
 			CFLAGS="-O2" \
-			--host=$target \
-			--target=$target \
-			--prefix="" \
+			--host=$SDK_TARGET \
+			--target=$SDK_TARGET \
+			--prefix="." \
 			--with-sysroot=$root \
 			--with-headers=$dist/include \
 			--disable-nls --disable-multilib --disable-selinux --disable-profile --disable-tunables
@@ -106,9 +97,9 @@ then
 		pushd $home/gcc
 		$ext/gcc/configure \
 			CFLAGS="-O2" \
-			--host=$target \
-			--target=$target \
-			--prefix="" \
+			--host=$SDK_TARGET \
+			--target=$SDK_TARGET \
+			--prefix="." \
 			--with-sysroot=$dist \
 			--with-native-system-header-dir=/include \
 			--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
@@ -129,11 +120,11 @@ then
 		mkdir -p $home/musl
 		pushd $home/musl
 		$ext/musl/configure \
-			CROSS_COMPILE=$target- \
+			CROSS_COMPILE=$SDK_TARGET- \
 			CFLAGS="-O2" \
-			--host=$target \
-			--target=$target \
-			--prefix="" \
+			--host=$SDK_TARGET \
+			--target=$SDK_TARGET \
+			--prefix="." \
 			$SDK_MUSL_ARGS
 		make
 		make DESTDIR=$dist install
