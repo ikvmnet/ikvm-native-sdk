@@ -111,7 +111,7 @@ then
 	fi
 fi
 
-# SDk requires musl
+# SDK requires musl
 if [ $SDK_LIBC == "musl" ]
 then
 	# build musl for distribution
@@ -134,23 +134,121 @@ then
 	fi
 fi
 
-# build fontconfig
-if [ ! -f $home/fontconfig/stamp ]
+# build zlib
+if [ ! -f $home/zlib/stamp ]
 then
-	mkdir -p $home/fontconfig
-	pushd $home/fontconfig
-	$ext/fontconfig/autogen.sh \
-		CFLAGS="-O0" \
-		--host=$SDK_TARGET \
-		--target=$SDK_TARGET \
+	mkdir -p $home/zlib
+	pushd $home/zlib
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CROSS_PREFIX=$SDK_TARGET- \
+	$ext/zlib/configure \
 		--prefix="" \
-		--with-sysroot=$dist \
-		$SDK_FONTCONFIG_ARGS
+		$SDK_ZLIB_ARGS
 	make
 	make DESTDIR=$dist install
 	touch stamp
 	popd
 fi
+
+# # build libpng
+# if [ ! -f $home/libpng/stamp ]
+# then
+# 	if [ ! -f $ext/libpng/configure ]
+# 	then
+# 		pushd $ext/libpng
+# 		./autogen.sh
+# 		popd
+# 	fi
+
+# 	mkdir -p $home/libpng
+# 	pushd $home/libpng
+# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+# 	PKG_CONFIG_SYSROOT_DIR=$dist \
+# 	$ext/libpng/configure \
+# 		CFLAGS="-O0" \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+# 		--with-sysroot=$dist \
+# 		$SDK_LIBPNG_ARGS
+# 	make
+# 	make DESTDIR=$dist install
+# 	touch stamp
+# 	popd
+# fi
+
+# # build freetype
+# if [ ! -f $home/freetype/stamp ]
+# then
+# 	pushd $ext/freetype
+# 	./autogen.sh
+# 	popd
+
+# 	mkdir -p $home/freetype
+# 	pushd $home/freetype
+# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+# 	PKG_CONFIG_SYSROOT_DIR=$dist \
+# 	$ext/freetype/configure \
+# 		CFLAGS="-O0" \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+# 		--with-sysroot=$dist \
+# 		$SDK_FREETYPE_ARGS
+# 	make
+# 	make DESTDIR=$dist install
+# 	touch stamp
+# 	popd
+# fi
+
+# # build libexpat
+# if [ ! -f $home/libexpat/stamp ]
+# then
+# 	pushd $ext/libexpat/expat
+# 	./buildconf.sh
+# 	popd
+
+# 	mkdir -p $home/libexpat/expat
+# 	pushd $home/libexpat
+# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+# 	PKG_CONFIG_SYSROOT_DIR=$dist \
+# 	$ext/libexpat/expat/configure \
+# 		CFLAGS="-O0" \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+# 		--with-sysroot=$dist \
+# 		$SDK_LIBEXPAT_ARGS
+# 	make
+# 	make DESTDIR=$dist install
+# 	touch stamp
+# 	popd
+# fi
+
+# # build fontconfig
+# if [ ! -f $home/fontconfig/stamp ]
+# then
+# 	pushd $ext/fontconfig
+# 	NOCONFIGURE=1 ./autogen.sh
+# 	popd
+
+# 	mkdir -p $home/fontconfig
+# 	pushd $home/fontconfig
+# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+# 	PKG_CONFIG_SYSROOT_DIR=$dist \
+# 	$ext/fontconfig/configure \
+# 		CFLAGS="-O0" \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+# 		--with-sysroot=$dist \
+# 		$SDK_FONTCONFIG_ARGS
+# 	make
+# 	make DESTDIR=$dist install
+# 	touch stamp
+# 	popd
+# fi
 
 # adjust symlinks to relative paths
 symlinks -cr $dist

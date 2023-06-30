@@ -82,7 +82,7 @@ jobs:
           gcc g++ \
           ninja-build zip unzip curl wget \
           help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xz-utils texinfo symlinks \
-          autopoint gettext gperf
+          autopoint gettext gperf expat
     - name: Build
       if: steps.dist-linux-stamp.outputs.files_exists != 'true'
       run: linux/build.sh ${{ matrix.rid }} && touch dist/${{ matrix.rid }}/stamp

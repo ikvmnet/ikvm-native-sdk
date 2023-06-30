@@ -51,3 +51,5 @@
 [submodule "ext/zlib"]
 	path = ext/zlib
 	url = https://github.com/madler/zlib.git
+	ignore = dirty
+	shallow = true
