@@ -9,6 +9,8 @@ crosstool-ng
 */glibc
 */musl
 */fontconfig
+*/freetype
+*/zlib
 */include
 */stamp
 */ct-ng-stamp
