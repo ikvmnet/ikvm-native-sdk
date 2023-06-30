@@ -140,35 +140,35 @@ jobs:
       with:
         name: windows
         path: dist
-    - name: Download Linux SDK (x86_64-unknown-linux-gnu)
+    - name: Download Linux SDK (linux-x64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--x86_64-unknown-linux-gnu
+        name: linux--linux-x64
         path: dist
-    - name: Download Linux SDK (x86_64-unknown-linux-musl)
+    - name: Download Linux SDK (linux-musl-x64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--x86_64-unknown-linux-musl
+        name: linux--linux-musl-x64
         path: dist
-    - name: Download Linux SDK (aarch64-unknown-linux-gnu)
+    - name: Download Linux SDK (linux-arm64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--aarch64-unknown-linux-gnu
+        name: linux--linux-arm64
         path: dist
-    - name: Download Linux SDK (aarch64-unknown-linux-musl)
+    - name: Download Linux SDK (linux-musl-arm64)
       uses: actions/download-artifact@v3
       with:
-        name: linux--aarch64-unknown-linux-musl
+        name: linux--linux-musl-arm64
         path: dist
-    - name: Download Linux SDK (arm-unknown-linux-gnueabihf)
+    - name: Download Linux SDK (linux-arm)
       uses: actions/download-artifact@v3
       with:
-        name: linux--arm-unknown-linux-gnueabihf
+        name: linux--linux-arm
         path: dist
-    - name: Download Linux SDK (arm-unknown-linux-musleabihf)
+    - name: Download Linux SDK (linux-musl-arm)
       uses: actions/download-artifact@v3
       with:
-        name: linux--arm-unknown-linux-musleabihf
+        name: linux--linux-musl-arm
         path: dist
     - name: Download Mac OS X SDK
       uses: actions/download-artifact@v3
