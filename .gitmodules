@@ -33,3 +33,21 @@
 	url = https://gitlab.freedesktop.org/fontconfig/fontconfig.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/freetype"]
+	path = ext/freetype
+	url = https://github.com/freetype/freetype.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libexpat"]
+	path = ext/libexpat
+	url = https://github.com/libexpat/libexpat.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libpng"]
+	path = ext/libpng
+	url = https://github.com/glennrp/libpng.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/zlib"]
+	path = ext/zlib
+	url = https://github.com/madler/zlib.git
