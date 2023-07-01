@@ -120,7 +120,7 @@ jobs:
       if: steps.dist-osx-stamp.outputs.files_exists != 'true'
       run: osx/build.sh && touch dist/osx/stamp
     - name: Package
-      run: tar czvhf /tmp/osx.tar.gz osx
+      run: tar czvf /tmp/osx.tar.gz osx
       working-directory: dist
     - name: Upload
       uses: actions/upload-artifact@v3
