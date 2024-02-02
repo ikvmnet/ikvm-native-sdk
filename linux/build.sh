@@ -250,18 +250,54 @@ fi
 # 	popd
 # fi
 
-# build fontconfig
-if [ ! -f $home/alsa/stamp ]
+# build libasound2
+if [ ! -f $home/libasound2/stamp ]
 then
-	pushd $ext/alsa
-	NOCONFIGURE=1 ./autogen.sh
+	pushd $ext/libasound2
+	touch ltconfig
+	libtoolize --force --copy --automake
+	aclocal $ACLOCAL_FLAGS
+	autoheader
+	automake --foreign --copy --add-missing
+	touch depcomp
+	autoconf
 	popd
 
-	mkdir -p $home/alsa
-	pushd $home/alsa
+	mkdir -p $home/libasound2
+	pushd $home/libasound2
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
-	$ext/alsa/configure \
+	$ext/libasound2/configure \
+		CFLAGS="-O0" \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_LIBASOUND2_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build ALSA
+if [ ! -f $home/alsa-lib/stamp ]
+then
+	pushd $ext/alsa-lib
+	touch ltconfig
+	libtoolize --force --copy --automake
+	aclocal $ACLOCAL_FLAGS
+	autoheader
+	automake --foreign --copy --add-missing
+	touch depcomp           # seems to be missing for old automake
+	autoconf
+	popd
+
+	mkdir -p $home/alsa-lib
+	pushd $home/alsa-lib
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/alsa-lib/configure \
 		CFLAGS="-O0" \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \

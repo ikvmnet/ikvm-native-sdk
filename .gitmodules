@@ -58,3 +58,9 @@
 	url = https://github.com/alsa-project/alsa-lib.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libasound2"]
+	path = ext/libasound2
+	url = https://github.com/pop-os/libasound2.git
+	ignore = dirty
+	shallow = true
+
