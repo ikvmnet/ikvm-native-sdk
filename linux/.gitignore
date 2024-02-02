@@ -11,6 +11,8 @@ crosstool-ng
 */fontconfig
 */freetype
 */zlib
+*/libasound2
+*/alsa-lib
 */include
 */stamp
 */ct-ng-stamp
