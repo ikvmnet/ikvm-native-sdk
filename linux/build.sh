@@ -250,36 +250,6 @@ fi
 # 	popd
 # fi
 
-# build libasound2
-if [ ! -f $home/libasound2/stamp ]
-then
-	pushd $ext/libasound2
-	touch ltconfig
-	libtoolize --force --copy --automake
-	aclocal $ACLOCAL_FLAGS
-	autoheader
-	automake --foreign --copy --add-missing
-	touch depcomp
-	autoconf
-	popd
-
-	mkdir -p $home/libasound2
-	pushd $home/libasound2
-	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
-	PKG_CONFIG_SYSROOT_DIR=$dist \
-	$ext/libasound2/configure \
-		CFLAGS="-O0" \
-		--host=$SDK_TARGET \
-		--target=$SDK_TARGET \
-		--prefix="" \
-		--with-sysroot=$dist \
-		$SDK_LIBASOUND2_ARGS
-	make
-	make DESTDIR=$dist install
-	touch stamp
-	popd
-fi
-
 # build ALSA
 if [ ! -f $home/alsa-lib/stamp ]
 then
@@ -303,6 +273,8 @@ then
 		--target=$SDK_TARGET \
 		--prefix="" \
 		--with-sysroot=$dist \
+		--disable-ucm \
+		--disable-topology \
 		$SDK_ALSA_ARGS
 	make
 	make DESTDIR=$dist install
