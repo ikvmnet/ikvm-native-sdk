@@ -250,6 +250,30 @@ fi
 # 	popd
 # fi
 
+# build fontconfig
+if [ ! -f $home/alsa/stamp ]
+then
+	pushd $ext/alsa
+	NOCONFIGURE=1 ./autogen.sh
+	popd
+
+	mkdir -p $home/alsa
+	pushd $home/alsa
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/alsa/configure \
+		CFLAGS="-O0" \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_ALSA_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # adjust symlinks to relative paths
 symlinks -cr $dist
 
