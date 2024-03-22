@@ -23,7 +23,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: dist/win
-        key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-2
+        key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-3
     - name: Check
       id: dist-win-stamp
       uses: andstor/file-existence-action@v3
