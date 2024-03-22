@@ -19,6 +19,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
     - name: Cache
       uses: actions/cache@v4
       with:
@@ -37,14 +38,25 @@ jobs:
     - name: Build
       if: steps.dist-win-stamp.outputs.files_exists != 'true'
       run: win/build.sh && touch dist/win/stamp
+
     - name: Package
       run: tar czvf /tmp/win.tar.gz win
-      working-directory: dist
+      working-directory: dist/win
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: win
         path: /tmp/win.tar.gz
+
+    - name: Package
+      run: tar czvf /tmp/win.ci.tar.gz win
+      working-directory: dist/win.ci
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: win.ci
+        path: /tmp/win.ci.tar.gz
+
   build-linux:
     strategy:
       matrix:

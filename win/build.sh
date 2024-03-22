@@ -1,10 +1,8 @@
 #!/bin/bash -ex
 
 xwin_version="0.2.12"
-
-dist="$(dirname "$0")/../dist/win"
 bin="$(dirname "$0")/bin"
-mkdir -p $sdk $bin
+mkdir -p $bin
 
 case "$(uname -s)" in
     Linux*)     xwin_prefix=xwin-$xwin_version-x86_64-unknown-linux-musl;;
@@ -13,4 +11,14 @@ case "$(uname -s)" in
 esac
 
 curl --fail -L https://github.com/Jake-Shadle/xwin/releases/download/$xwin_version/$xwin_prefix.tar.gz | tar -xzv -C $bin --strip-components=1 $xwin_prefix/xwin
-$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --preserve-ms-arch-notation --output $dist
+
+
+# with symlinks for case-sensitive file systems
+dist="$(dirname "$0")/../dist/win/win"
+rm -rf $dist
+$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --include-debug-libs --preserve-ms-arch-notation --output $dist
+
+# without symlinks for case-insensitive file systems
+dist="$(dirname "$0")/../dist/win/win.ci"
+rm -rf $dist
+$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --disable-symlinks --include-debug-libs --preserve-ms-arch-notation --output $dist
