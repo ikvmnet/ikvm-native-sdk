@@ -18,9 +18,9 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: dist/win
         key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-2
@@ -41,7 +41,7 @@ jobs:
       run: tar czvf /tmp/win.tar.gz win
       working-directory: dist
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: win
         path: /tmp/win.tar.gz
@@ -60,11 +60,11 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: dist/${{ matrix.rid }}
         key: dist--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
@@ -90,7 +90,7 @@ jobs:
       run: tar czvf /tmp/${{ matrix.rid }}.tar.gz ${{ matrix.rid }}
       working-directory: dist
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.rid }}
         path: /tmp/${{ matrix.rid }}.tar.gz
@@ -100,9 +100,9 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: dist/osx
         key: dist--osx--${{ runner.os }}--${{ hashFiles('osx/build.sh') }}-1
@@ -123,7 +123,7 @@ jobs:
       run: tar czvf /tmp/osx.tar.gz osx
       working-directory: dist
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: osx
         path: /tmp/osx.tar.gz
@@ -137,48 +137,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download (win)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: win
         path: dist
     - name: Download (linux-x64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-x64
         path: dist
     - name: Download (linux-musl-x64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-x64
         path: dist
     - name: Download (linux-arm64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-arm64
         path: dist
     - name: Download (linux-musl-arm64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-arm64
         path: dist
     - name: Download (linux-arm)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-arm
         path: dist
     - name: Download (linux-musl-arm)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-arm
         path: dist
     - name: Download (osx)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: osx
         path: dist
     - name: Create Release
       if: github.ref_type == 'tag'
-      uses: ncipollo/release-action@v1.10.0
+      uses: ncipollo/release-action@v1
       with:
         tag: ${{ github.ref_name }}
         allowUpdates: true
