@@ -39,19 +39,19 @@ jobs:
       if: steps.dist-win-stamp.outputs.files_exists != 'true'
       run: win/build.sh && touch dist/win/stamp
 
-    - name: Package
+    - name: Package (win)
       run: tar czvf /tmp/win.tar.gz win
       working-directory: dist/win
-    - name: Upload
+    - name: Upload (win)
       uses: actions/upload-artifact@v4
       with:
         name: win
         path: /tmp/win.tar.gz
 
-    - name: Package
+    - name: Package (win.ci)
       run: tar czvf /tmp/win.ci.tar.gz win
       working-directory: dist/win.ci
-    - name: Upload
+    - name: Upload (win.ci)
       uses: actions/upload-artifact@v4
       with:
         name: win.ci
