@@ -26,7 +26,7 @@ jobs:
         key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-2
     - name: Check
       id: dist-win-stamp
-      uses: andstor/file-existence-action@v2
+      uses: andstor/file-existence-action@v3
       with:
         files: dist/win/stamp
     - name: Install
@@ -70,7 +70,7 @@ jobs:
         key: dist--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
     - name: Check
       id: dist-linux-stamp
-      uses: andstor/file-existence-action@v2
+      uses: andstor/file-existence-action@v3
       with:
         files: dist/${{ matrix.rid }}/stamp
     - name: Install
@@ -108,7 +108,7 @@ jobs:
         key: dist--osx--${{ runner.os }}--${{ hashFiles('osx/build.sh') }}-1
     - name: Check
       id: dist-osx-stamp
-      uses: andstor/file-existence-action@v2
+      uses: andstor/file-existence-action@v3
       with:
         files: dist/osx/stamp
     - name: Install
