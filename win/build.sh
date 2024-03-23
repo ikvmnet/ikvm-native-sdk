@@ -14,11 +14,11 @@ curl --fail -L https://github.com/Jake-Shadle/xwin/releases/download/$xwin_versi
 
 
 # with symlinks for case-sensitive file systems
-dist="$(dirname "$0")/../dist/win/win"
+dist="$(dirname "$0")/../dist/win"
 rm -rf $dist
 $bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --include-debug-libs --preserve-ms-arch-notation --output $dist
 
 # without symlinks for case-insensitive file systems
-dist="$(dirname "$0")/../dist/win/win.ci"
+dist="$(dirname "$0")/../dist/win.ci"
 rm -rf $dist
 $bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --disable-symlinks --include-debug-libs --preserve-ms-arch-notation --output $dist
