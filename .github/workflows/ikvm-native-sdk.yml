@@ -138,6 +138,11 @@ jobs:
       with:
         name: win
         path: dist
+    - name: Download (win.ci)
+      uses: actions/download-artifact@v4
+      with:
+        name: win.ci
+        path: dist
     - name: Download (linux-x64)
       uses: actions/download-artifact@v4
       with:
