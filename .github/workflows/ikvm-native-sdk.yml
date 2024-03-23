@@ -23,6 +23,11 @@ jobs:
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl wget
+    - name: Cache (xwin)
+      uses: actions/cache@v4
+      with:
+        path: /tmp/xwincache
+        key: tmp--xwincache--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-1
     - name: Build
       run: win/build.sh
     - name: Package (win)
