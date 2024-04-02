@@ -18,33 +18,34 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
-    - name: Cache
-      uses: actions/cache@v3
-      with:
-        path: dist/win
-        key: dist--win--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-2
-    - name: Check
-      id: dist-win-stamp
-      uses: andstor/file-existence-action@v2
-      with:
-        files: dist/win/stamp
+      uses: actions/checkout@v4
     - name: Install
-      if: steps.dist-win-stamp.outputs.files_exists != 'true'
       run: |
         sudo apt-get update &&
         sudo apt-get install -y zip unzip curl wget
+    - name: Cache (xwin)
+      uses: actions/cache@v4
+      with:
+        path: /tmp/xwincache
+        key: tmp--xwincache--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('win/build.sh') }}-1
     - name: Build
-      if: steps.dist-win-stamp.outputs.files_exists != 'true'
-      run: win/build.sh && touch dist/win/stamp
-    - name: Package
+      run: win/build.sh
+    - name: Package (win)
       run: tar czvf /tmp/win.tar.gz win
       working-directory: dist
-    - name: Upload
-      uses: actions/upload-artifact@v3
+    - name: Upload (win)
+      uses: actions/upload-artifact@v4
       with:
         name: win
         path: /tmp/win.tar.gz
+    - name: Package (win.ci)
+      run: tar czvf /tmp/win.ci.tar.gz win.ci
+      working-directory: dist
+    - name: Upload (win.ci)
+      uses: actions/upload-artifact@v4
+      with:
+        name: win.ci
+        path: /tmp/win.ci.tar.gz
   build-linux:
     strategy:
       matrix:
@@ -60,17 +61,17 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: dist/${{ matrix.rid }}
         key: dist--${{ matrix.rid }}--${{ runner.os }}--${{ hashFiles('linux/build.sh', 'linux/*/.config', 'linux/*/sdk.config') }}-1
     - name: Check
       id: dist-linux-stamp
-      uses: andstor/file-existence-action@v2
+      uses: andstor/file-existence-action@v3
       with:
         files: dist/${{ matrix.rid }}/stamp
     - name: Install
@@ -90,7 +91,7 @@ jobs:
       run: tar czvf /tmp/${{ matrix.rid }}.tar.gz ${{ matrix.rid }}
       working-directory: dist
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.rid }}
         path: /tmp/${{ matrix.rid }}.tar.gz
@@ -100,15 +101,15 @@ jobs:
     timeout-minutes: 240
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: dist/osx
         key: dist--osx--${{ runner.os }}--${{ hashFiles('osx/build.sh') }}-1
     - name: Check
       id: dist-osx-stamp
-      uses: andstor/file-existence-action@v2
+      uses: andstor/file-existence-action@v3
       with:
         files: dist/osx/stamp
     - name: Install
@@ -123,7 +124,7 @@ jobs:
       run: tar czvf /tmp/osx.tar.gz osx
       working-directory: dist
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: osx
         path: /tmp/osx.tar.gz
@@ -137,48 +138,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download (win)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: win
         path: dist
+    - name: Download (win.ci)
+      uses: actions/download-artifact@v4
+      with:
+        name: win.ci
+        path: dist
     - name: Download (linux-x64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-x64
         path: dist
     - name: Download (linux-musl-x64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-x64
         path: dist
     - name: Download (linux-arm64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-arm64
         path: dist
     - name: Download (linux-musl-arm64)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-arm64
         path: dist
     - name: Download (linux-arm)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-arm
         path: dist
     - name: Download (linux-musl-arm)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: linux-musl-arm
         path: dist
     - name: Download (osx)
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: osx
         path: dist
     - name: Create Release
       if: github.ref_type == 'tag'
-      uses: ncipollo/release-action@v1.10.0
+      uses: ncipollo/release-action@v1
       with:
         tag: ${{ github.ref_name }}
         allowUpdates: true
