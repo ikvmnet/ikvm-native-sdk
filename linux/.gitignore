@@ -13,6 +13,14 @@ crosstool-ng
 */zlib
 */libasound2
 */alsa-lib
+*/libpng
+*/libx11
+*/xcbproto
+*/xorgproto
 */include
 */stamp
 */ct-ng-stamp
+*/libxdmcp
+*/libxau
+*/libxtrans
+*/libxcb

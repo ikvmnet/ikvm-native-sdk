@@ -151,32 +151,36 @@ then
 	popd
 fi
 
-# # build libpng
-# if [ ! -f $home/libpng/stamp ]
-# then
-# 	if [ ! -f $ext/libpng/configure ]
-# 	then
-# 		pushd $ext/libpng
-# 		./autogen.sh
-# 		popd
-# 	fi
+# build libpng
+if [ ! -f $home/libpng/stamp ]
+then
+	if [ ! -f $ext/libpng/configure ]
+	then
+		pushd $ext/libpng
+		NOCONFIGURE=1 ./autogen.sh
+		popd
+	fi
 
-# 	mkdir -p $home/libpng
-# 	pushd $home/libpng
-# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
-# 	PKG_CONFIG_SYSROOT_DIR=$dist \
-# 	$ext/libpng/configure \
-# 		CFLAGS="-O0" \
-# 		--host=$SDK_TARGET \
-# 		--target=$SDK_TARGET \
-# 		--prefix="" \
-# 		--with-sysroot=$dist \
-# 		$SDK_LIBPNG_ARGS
-# 	make
-# 	make DESTDIR=$dist install
-# 	touch stamp
-# 	popd
-# fi
+	mkdir -p $home/libpng
+	pushd $home/libpng
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CFLAGS="--sysroot=$dist -I$dist/include" \
+	CPPFLAGS="--sysroot=$dist -I$dist/include" \
+	LDFLAGS="--sysroot=$dist -L$dist/lib" \
+	$ext/libpng/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix=$dist \
+		--includedir=$dist/include \
+		--with-sysroot=$dist \
+		--with-zlib-prefix=$dist \
+		$SDK_LIBPNG_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
 
 # # build freetype
 # if [ ! -f $home/freetype/stamp ]
@@ -276,6 +280,162 @@ then
 		--disable-ucm \
 		--disable-topology \
 		$SDK_ALSA_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build xorgproto
+if [ ! -f $home/xorgproto/stamp ]
+then
+	mkdir -p $home/xorgproto
+	pushd $home/xorgproto
+	mkdir build && cd build
+	meson setup --prefix=/ $ext/xorgproto
+	ninja
+	DESTDIR=$dist ninja install
+	touch stamp
+	popd
+fi
+
+# build xcbproto
+if [ ! -f $home/xcbproto/stamp ]
+then
+ 	pushd $ext/xcbproto
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/xcbproto
+	pushd $home/xcbproto
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/xcbproto/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_XCBPROTO_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxdmcp
+if [ ! -f $home/libxdmcp/stamp ]
+then
+ 	pushd $ext/libxdmcp
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/libxdmcp
+	pushd $home/libxdmcp
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/libxdmcp/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_LIBXDMCP_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxtrans
+if [ ! -f $home/libxtrans/stamp ]
+then
+ 	pushd $ext/libxtrans
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/libxtrans
+	pushd $home/libxtrans
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/libxtrans/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_LIBXTRANS_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxau
+if [ ! -f $home/libxau/stamp ]
+then
+ 	pushd $ext/libxau
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/libxau
+	pushd $home/libxau
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/libxau/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		$SDK_LIBXAU_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxcb
+if [ ! -f $home/libxcb/stamp ]
+then
+ 	pushd $ext/libxcb
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/libxcb
+	pushd $home/libxcb
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxcb/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--disable-static \
+		$SDK_LIBXCB_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libx11
+if [ ! -f $home/libx11/stamp ]
+then
+ 	pushd $ext/libx11
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	popd
+
+	mkdir -p $home/libx11
+	mkdir -p $dist/usr/include/X11
+	pushd $home/libx11
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libx11/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBX11_ARGS
 	make
 	make DESTDIR=$dist install
 	touch stamp

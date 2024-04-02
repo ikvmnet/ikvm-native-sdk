@@ -58,3 +58,38 @@
 	url = https://github.com/alsa-project/alsa-lib.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libx11"]
+	path = ext/libx11
+	url = https://gitlab.freedesktop.org/xorg/lib/libx11.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/xorgproto"]
+	path = ext/xorgproto
+	url = https://gitlab.freedesktop.org/xorg/proto/xorgproto.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxdmcp"]
+	path = ext/libxdmcp
+	url = https://gitlab.freedesktop.org/xorg/lib/libxdmcp.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxtrans"]
+	path = ext/libxtrans
+	url = https://gitlab.freedesktop.org/xorg/lib/libxtrans.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxcb"]
+	path = ext/libxcb
+	url = https://gitlab.freedesktop.org/xorg/lib/libxcb.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/xcbproto"]
+	path = ext/xcbproto
+	url = https://gitlab.freedesktop.org/xorg/proto/xcbproto.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxau"]
+	path = ext/libxau
+	url = https://gitlab.freedesktop.org/xorg/lib/libxau.git
+	ignore = dirty
+	shallow = true
