@@ -418,31 +418,31 @@ then
 	popd
 fi
 
-# build libx11
-if [ ! -f $home/libx11/stamp ]
-then
- 	pushd $ext/libx11
- 	NOCONFIGURE=1 ./autogen.sh --prefix=""
- 	popd
-
-	mkdir -p $home/libx11
-	mkdir -p $dist/usr/include/X11
-	pushd $home/libx11
-	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
-	PKG_CONFIG_SYSROOT_DIR=$dist \
-	LDFLAGS="--sysroot=$dist" \
-	$ext/libx11/configure \
-		--host=$SDK_TARGET \
-		--target=$SDK_TARGET \
-		--prefix="" \
-		--with-sysroot=$dist \
-		--enable-malloc0returnsnull \
-		$SDK_LIBX11_ARGS
-	make
-	make DESTDIR=$dist install
-	touch stamp
-	popd
-fi
+## build libx11
+#if [ ! -f $home/libx11/stamp ]
+#then
+# 	pushd $ext/libx11
+# 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+# 	popd
+#
+#	mkdir -p $home/libx11
+#	mkdir -p $dist/usr/include/X11
+#	pushd $home/libx11
+#	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+#	PKG_CONFIG_SYSROOT_DIR=$dist \
+#	LDFLAGS="--sysroot=$dist" \
+#	$ext/libx11/configure \
+#		--host=$SDK_TARGET \
+#		--target=$SDK_TARGET \
+#		--prefix="" \
+#		--with-sysroot=$dist \
+#		--enable-malloc0returnsnull \
+#		$SDK_LIBX11_ARGS
+#	make
+#	make DESTDIR=$dist install
+#	touch stamp
+#	popd
+#fi
 
 # adjust symlinks to relative paths
 symlinks -cr $dist
