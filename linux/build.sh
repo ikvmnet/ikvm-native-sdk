@@ -291,10 +291,12 @@ if [ ! -f $home/xorgproto/stamp ]
 then
 	mkdir -p $home/xorgproto
 	pushd $home/xorgproto
-	mkdir build && cd build
+	mkdir build
+	pushd build
 	meson setup --prefix=/ $ext/xorgproto
 	ninja
 	DESTDIR=$dist ninja install
+	popd
 	touch stamp
 	popd
 fi
