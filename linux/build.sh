@@ -25,6 +25,10 @@ echo $dist
 # include ct-nt variable
 source $home/sdk.config
 
+mkdir -p $dist
+rm -f $dist/usr
+ln -s . $dist/usr
+
 # copy Linux headers for distribution
 if [ ! -f $home/linux/stamp ]
 then
@@ -422,7 +426,7 @@ fi
 if [ ! -f $home/libx11/stamp ]
 then
  	pushd $ext/libx11
- 	NOCONFIGURE=1 ./autogen.sh --prefix=""
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
  	popd
 
 	mkdir -p $home/libx11
@@ -430,7 +434,9 @@ then
 	pushd $home/libx11
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
-	LDFLAGS="--sysroot=$dist" \
+	CFLAGS="--sysroot=$dist -I$dist/include -I$dist/include/X11" \
+	CPPFLAGS="--sysroot=$dist -I$dist/include -I$dist/include/X11" \
+	LDFLAGS="--sysroot=$dist -L$dist/lib -L$dist/lib/X11" \
 	$ext/libx11/configure \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \
@@ -447,5 +453,6 @@ fi
 # adjust symlinks to relative paths
 symlinks -cr $dist
 
-# remove unused directories
+# remove unused directories and files
 rm -rf $dist/bin $dist/etc $dist/libexec $dist/sbin $dist/share $dist/var
+rm -f $dist/usr
