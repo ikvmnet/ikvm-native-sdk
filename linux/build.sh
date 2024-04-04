@@ -435,6 +435,7 @@ then
 	pushd $home/libx11
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
 	$ext/libx11/configure \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \
