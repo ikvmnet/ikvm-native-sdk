@@ -1,4 +1,5 @@
 #!/bin/bash -ex
+# version:1
 
 export sdk=$(dirname $(readlink -f $0))
 export ext=$(dirname $sdk)/ext
