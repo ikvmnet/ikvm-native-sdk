@@ -93,3 +93,18 @@
 	url = https://gitlab.freedesktop.org/xorg/lib/libxau.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libxt"]
+	path = ext/libxt
+	url = https://gitlab.freedesktop.org/xorg/lib/libxt.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libsm"]
+	path = ext/libsm
+	url = https://gitlab.freedesktop.org/xorg/lib/libsm.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libice"]
+	path = ext/libice
+	url = https://gitlab.freedesktop.org/xorg/lib/libice.git
+	ignore = dirty
+	shallow = true

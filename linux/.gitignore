@@ -24,3 +24,6 @@ crosstool-ng
 */libxau
 */libxtrans
 */libxcb
+*/libice
+*/libsm
+*/libxt

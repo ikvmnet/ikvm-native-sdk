@@ -450,6 +450,81 @@ then
 	popd
 fi
 
+# build libice
+if [ ! -f $home/libice/stamp ]
+then
+ 	pushd $ext/libice
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libice
+	pushd $home/libice
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libice/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBICE_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libsm
+if [ ! -f $home/libsm/stamp ]
+then
+ 	pushd $ext/libsm
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libsm
+	pushd $home/libsm
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libsm/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBSM_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxt
+if [ ! -f $home/libxt/stamp ]
+then
+ 	pushd $ext/libxt
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxt
+	pushd $home/libxt
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxt/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXT_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # adjust symlinks to relative paths
 symlinks -cr $dist
 
