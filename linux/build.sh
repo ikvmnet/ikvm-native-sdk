@@ -434,14 +434,12 @@ then
 	pushd $home/libx11
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
-	CFLAGS="--sysroot=$dist -I$dist/include -I$dist/include/X11" \
-	CPPFLAGS="--sysroot=$dist -I$dist/include -I$dist/include/X11" \
-	LDFLAGS="--sysroot=$dist -L$dist/lib -L$dist/lib/X11" \
 	$ext/libx11/configure \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \
 		--prefix="" \
 		--with-sysroot=$dist \
+		--with-keysymdefdir=$dist/include/X11 \
 		--enable-malloc0returnsnull \
 		$SDK_LIBX11_ARGS
 	make
