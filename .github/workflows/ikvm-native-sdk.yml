@@ -79,7 +79,7 @@ jobs:
       run: |
         sudo apt-get update &&
         sudo apt-get install -y \
-          build-essential \
+          build-essential fakeroot \
           gcc g++ \
           ninja-build zip unzip curl wget \
           help2man bison flex libtool libtool-bin patch libstdc++6 rsync git meson xutils-dev xz-utils texinfo symlinks \

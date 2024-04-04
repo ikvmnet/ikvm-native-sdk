@@ -156,6 +156,29 @@ then
 	popd
 fi
 
+# build util-linux
+if [ ! -f $home/util-linux/stamp ]
+then
+	if [ ! -f $ext/util-linux/configure ]
+	then
+		pushd $ext/util-linux
+		NOCONFIGURE=1 ./autogen.sh
+		popd
+	fi
+
+	mkdir -p $home/util-linux
+	pushd $home/util-linux
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/util-linux/configure \
+		--prefix="" \
+		$SDK_UTIL_LINUX_ARGS
+	make
+	fakeroot make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # build libpng
 if [ ! -f $home/libpng/stamp ]
 then
