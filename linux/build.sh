@@ -186,29 +186,29 @@ then
 	popd
 fi
 
- # build freetype
- if [ ! -f $home/freetype/stamp ]
- then
- 	pushd $ext/freetype
- 	NOCONFIGURE=1 ./autogen.sh
- 	popd
-
- 	mkdir -p $home/freetype
- 	pushd $home/freetype
- 	PKG_CONFIG_PATH=$dist/share/pkgconfig:$dist/lib/pkgconfig \
- 	PKG_CONFIG_SYSROOT_DIR=$dist \
- 	$ext/freetype/configure \
- 		CFLAGS="-O0" \
- 		--host=$SDK_TARGET \
- 		--target=$SDK_TARGET \
- 		--prefix="" \
- 		--with-sysroot=$dist \
- 		$SDK_FREETYPE_ARGS
- 	make
- 	make DESTDIR=$dist install
- 	touch stamp
- 	popd
- fi
+# # build freetype
+# if [ ! -f $home/freetype/stamp ]
+# then
+# 	pushd $ext/freetype
+# 	NOCONFIGURE=1 ./autogen.sh
+# 	popd
+#
+# 	mkdir -p $home/freetype
+# 	pushd $home/freetype
+# 	PKG_CONFIG_PATH=$dist/share/pkgconfig:$dist/lib/pkgconfig \
+# 	PKG_CONFIG_SYSROOT_DIR=$dist \
+# 	$ext/freetype/configure \
+# 		CFLAGS="-O0" \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+# 		--with-sysroot=$dist \
+# 		$SDK_FREETYPE_ARGS
+# 	make
+# 	make DESTDIR=$dist install
+# 	touch stamp
+# 	popd
+# fi
 
 # # build libexpat
 # if [ ! -f $home/libexpat/stamp ]
