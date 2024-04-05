@@ -258,12 +258,24 @@ then
 	pushd $home/util-linux
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CFLAGS="-I$dist/include" \
 	LDFLAGS="-L$dist/lib" \
 	$ext/util-linux/configure \
  		--host=$SDK_TARGET \
  		--target=$SDK_TARGET \
  		--prefix="" \
  		--with-sysroot=$dist \
+		--without-python \
+		--disable-login \
+		--disable-nologin \
+		--disable-kill \
+		--disable-chfn-chsh \
+		--disable-cal \
+		--disable-hwclock-gplv3 \
+		--disable-libmount \
+		--disable-mount \
+		--disable-libblkid \
+		--disable-libfdisk \
 		$SDK_UTIL_LINUX_ARGS
 	make
 	fakeroot make DESTDIR=$dist install
