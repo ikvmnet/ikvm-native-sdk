@@ -29,3 +29,5 @@ crosstool-ng
 */libxt
 */util-linux
 */cpython
+*/libffi
+*/ncurses

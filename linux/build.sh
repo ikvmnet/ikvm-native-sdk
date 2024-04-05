@@ -148,7 +148,10 @@ then
 	PKG_CONFIG_SYSROOT_DIR=$dist \
 	CROSS_PREFIX=$SDK_TARGET- \
 	$ext/zlib/configure \
-		--prefix="" \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
 		$SDK_ZLIB_ARGS
 	make
 	make DESTDIR=$dist install
@@ -156,22 +159,82 @@ then
 	popd
 fi
 
-# build cpython
-if [ ! -f $home/cpython/stamp ]
+# build ncurses
+if [ ! -f $home/ncurses/stamp ]
 then
-	mkdir -p $home/cpython
-	pushd $home/cpython
-	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	if [ ! -f $ext/ncurses/configure ]
+	then
+		pushd $ext/ncurses
+		NOCONFIGURE=1 ./autogen.sh
+		popd
+	fi
+
+	mkdir -p $home/ncurses
+	pushd $home/ncurses
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
-	$ext/cpython/configure \
-		--prefix="" \
-		$SDK_CPYTHON_ARGS
+	$ext/ncurses/configure \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
+		--disable-stripping \
+		$SDK_NCURSES_ARGS
 	make
 	make DESTDIR=$dist install
 	touch stamp
 	popd
 fi
 
+# build libffi
+if [ ! -f $home/libffi/stamp ]
+then
+	if [ ! -f $ext/libffi/configure ]
+	then
+		pushd $ext/libffi
+		NOCONFIGURE=1 ./autogen.sh
+		popd
+	fi
+
+	mkdir -p $home/libffi
+	pushd $home/libffi
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/libffi/configure \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
+		$SDK_LIBFFI_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+## build cpython
+#if [ ! -f $home/cpython/stamp ]
+#then
+#	mkdir -p $home/cpython
+#	pushd $home/cpython
+#	echo "ac_cv_file__dev_ptmx=no" >  config.site
+#	echo "ac_cv_file__dev_ptc=no"  >> config.site
+#	CONFIG_SITE=./config.site \
+#	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+#	PKG_CONFIG_SYSROOT_DIR=$dist \
+#	$ext/cpython/configure \
+#		--build=`gcc -print-multiarch` \
+# 		--host=$SDK_TARGET \
+# 		--target=$SDK_TARGET \
+# 		--prefix="" \
+#		--disable-ipv6 \
+#		--with-config-site=./CONFIG_SITE
+#		$SDK_CPYTHON_ARGS
+#	make
+#	make DESTDIR=$dist install
+#	touch stamp
+#	popd
+#fi
 
 # build util-linux
 if [ ! -f $home/util-linux/stamp ]
@@ -188,7 +251,10 @@ then
 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
 	$ext/util-linux/configure \
-		--prefix="" \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
 		$SDK_UTIL_LINUX_ARGS
 	make
 	fakeroot make DESTDIR=$dist install

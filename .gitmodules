@@ -118,3 +118,13 @@
 	url = https://github.com/python/cpython.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libffi"]
+	path = ext/libffi
+	url = https://github.com/libffi/libffi.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/ncurses"]
+	path = ext/ncurses
+	url = https://github.com/mirror/ncurses.git
+	ignore = dirty
+	shallow = true
