@@ -156,6 +156,23 @@ then
 	popd
 fi
 
+# build cpython
+if [ ! -f $home/cpython/stamp ]
+then
+	mkdir -p $home/cpython
+	pushd $home/cpython
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/cpython/configure \
+		--prefix="" \
+		$SDK_CPYTHON_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+
 # build util-linux
 if [ ! -f $home/util-linux/stamp ]
 then

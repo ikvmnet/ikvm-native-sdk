@@ -113,3 +113,8 @@
 	url = https://github.com/util-linux/util-linux.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/cpython"]
+	path = ext/cpython
+	url = https://github.com/python/cpython.git
+	ignore = dirty
+	shallow = true
