@@ -148,7 +148,6 @@ then
 	PKG_CONFIG_SYSROOT_DIR=$dist \
 	CROSS_PREFIX=$SDK_TARGET- \
 	$ext/zlib/configure \
- 		--host=$SDK_TARGET \
  		--target=$SDK_TARGET \
  		--prefix="" \
  		--with-sysroot=$dist \
