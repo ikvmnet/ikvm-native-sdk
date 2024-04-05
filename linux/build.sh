@@ -175,7 +175,18 @@ then
  		--target=$SDK_TARGET \
  		--prefix="" \
  		--with-sysroot=$dist \
+		--with-shared \
+		--without-debug \
+		--enable-echo \
+		--disable-rpath \
 		--disable-stripping \
+		--enable-const \
+		--enable-pc-files \
+		--with-ticlib=tic \
+		--with-termlib=tinfo \
+		--without-ada \
+		--without-tests \
+		--without-progs \
 		$SDK_NCURSES_ARGS
 	make
 	make DESTDIR=$dist install
