@@ -148,9 +148,7 @@ then
 	PKG_CONFIG_SYSROOT_DIR=$dist \
 	CROSS_PREFIX=$SDK_TARGET- \
 	$ext/zlib/configure \
- 		--target=$SDK_TARGET \
- 		--prefix="" \
- 		--with-sysroot=$dist \
+		--prefix="" \
 		$SDK_ZLIB_ARGS
 	make
 	make DESTDIR=$dist install
