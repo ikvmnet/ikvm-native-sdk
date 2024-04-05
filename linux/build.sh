@@ -256,8 +256,9 @@ then
 
 	mkdir -p $home/util-linux
 	pushd $home/util-linux
-	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="-L$dist/lib" \
 	$ext/util-linux/configure \
  		--host=$SDK_TARGET \
  		--target=$SDK_TARGET \
