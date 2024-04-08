@@ -303,7 +303,7 @@ then
 	$ext/libpng/configure \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \
-		--prefix=$dist \
+		--prefix="" \
 		--includedir=$dist/include \
 		--with-sysroot=$dist \
 		--with-zlib-prefix=$dist \
@@ -423,7 +423,7 @@ if [ ! -f $home/xorgproto/stamp ]
 then
 	mkdir -p $home/xorgproto
 	pushd $home/xorgproto
-	mkdir build
+	mkdir -p build
 	pushd build
 	meson setup --prefix=/ $ext/xorgproto
 	ninja
