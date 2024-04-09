@@ -656,5 +656,4 @@ fi
 symlinks -cr $dist
 
 # remove unused directories and files
-rm -rf $dist/bin $dist/etc $dist/libexec $dist/sbin $dist/var $dist/home
-rm -rf $dist/usr
+rm -rf $dist/bin $dist/etc $dist/libexec $dist/sbin $dist/var $dist/home $dist/share $dist/usr
