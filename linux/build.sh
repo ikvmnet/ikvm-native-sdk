@@ -652,6 +652,31 @@ then
 	popd
 fi
 
+# build libxrender
+if [ ! -f $home/libxrender/stamp ]
+then
+ 	pushd $ext/libxrender
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxrender
+	pushd $home/libxrender
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxrender/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXRENDER_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # adjust symlinks to relative paths
 symlinks -cr $dist
 
