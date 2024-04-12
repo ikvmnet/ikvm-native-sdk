@@ -677,6 +677,106 @@ then
 	popd
 fi
 
+# build libxext
+if [ ! -f $home/libxext/stamp ]
+then
+ 	pushd $ext/libxext
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxext
+	pushd $home/libxext
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxext/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXEXT_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxfixes
+if [ ! -f $home/libxfixes/stamp ]
+then
+ 	pushd $ext/libxfixes
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxfixes
+	pushd $home/libxfixes
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxfixes/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXFIXES_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxi
+if [ ! -f $home/libxi/stamp ]
+then
+ 	pushd $ext/libxi
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxi
+	pushd $home/libxi
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxi/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXI_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+# build libxtst
+if [ ! -f $home/libxtst/stamp ]
+then
+ 	pushd $ext/libxtst
+ 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+ 	popd
+
+	mkdir -p $home/libxtst
+	pushd $home/libxtst
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	LDFLAGS="--sysroot=$dist" \
+	$ext/libxtst/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--enable-malloc0returnsnull \
+		$SDK_LIBXTST_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # adjust symlinks to relative paths
 symlinks -cr $dist
 

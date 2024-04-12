@@ -133,3 +133,23 @@
 	url = https://gitlab.freedesktop.org/xorg/lib/libxrender.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libxtst"]
+	path = ext/libxtst
+	url = https://gitlab.freedesktop.org/xorg/lib/libxtst.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxext"]
+	path = ext/libxext
+	url = https://gitlab.freedesktop.org/xorg/lib/libxext.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxi"]
+	path = ext/libxi
+	url = https://gitlab.freedesktop.org/xorg/lib/libxi.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/libxfixes"]
+	path = ext/libxfixes
+	url = https://gitlab.freedesktop.org/xorg/lib/libxfixes.git
+	ignore = dirty
+	shallow = true
