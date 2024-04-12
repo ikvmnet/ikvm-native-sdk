@@ -153,3 +153,13 @@
 	url = https://gitlab.freedesktop.org/xorg/lib/libxfixes.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/libcups"]
+	path = ext/libcups
+	url = https://github.com/OpenPrinting/libcups.git
+	ignore = dirty
+	shallow = true
+[submodule "ext/linux-pam"]
+	path = ext/linux-pam
+	url = https://github.com/linux-pam/linux-pam.git
+	ignore = dirty
+	shallow = true

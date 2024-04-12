@@ -212,6 +212,7 @@ then
  		--host=$SDK_TARGET \
  		--target=$SDK_TARGET \
  		--prefix="" \
+		--libdir="/lib" \
  		--with-sysroot=$dist \
 		$SDK_LIBFFI_ARGS
 	make
@@ -773,6 +774,69 @@ then
 		$SDK_LIBXTST_ARGS
 	make
 	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
+## build linux-pam
+#if [ ! -f $home/linux-pam/stamp ]
+#then
+# 	pushd $ext/linux-pam
+# 	NOCONFIGURE=1 ./autogen.sh --prefix=$dist
+# 	popd
+
+#	mkdir -p $home/linux-pam
+#	pushd $home/linux-pam
+#	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+#	PKG_CONFIG_SYSROOT_DIR=$dist \
+#	LDFLAGS="--sysroot=$dist" \
+#	$ext/linux-pam/configure \
+#		--host=$SDK_TARGET \
+#		--target=$SDK_TARGET \
+#		--prefix="" \
+#		--with-sysroot=$dist \
+#		--disable-selinux \
+#		--disable-nis \
+#		--disable-regenerate-docu \
+#		$SDK_LINUX_PAM_ARGS
+#	make
+#	make DESTDIR=$dist install
+#	touch stamp
+#	popd
+#fi
+
+# build libcups
+if [ ! -f $home/libcups/stamp ]
+then
+	pushd $ext/libcups
+	git clean -xdf
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CFLAGS="--sysroot=$dist -I$dist/include" \
+	CPPFLAGS="--sysroot=$dist -I$dist/include" \
+	LDFLAGS="--sysroot=$dist -L$dist/lib" \
+	DSOFLAGS="--sysroot=$dist -L$dist/lib" \
+	LIBRARY_PATH="$dist/lib" \
+	$ext/libcups/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--libdir="/lib" \
+		--without-perl \
+		--without-java \
+		--without-php \
+		--without-python \
+		--disable-gnutls \
+		--disable-gssapi \
+		--disable-dbus \
+		--disable-pam \
+		$SDK_LIBCUPS_ARGS
+	make SHELL='sh -x'
+	make BUILDROOT=$dist install
+	popd
+
+	mkdir -p $home/libcups
+	pushd $home/libcups
 	touch stamp
 	popd
 fi

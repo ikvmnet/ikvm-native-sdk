@@ -36,3 +36,5 @@ crosstool-ng
 */libxtst
 */libxfixes
 */libxext
+*/linux-pam
+*/libcups
