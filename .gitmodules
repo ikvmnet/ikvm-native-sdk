@@ -163,3 +163,8 @@
 	url = https://github.com/linux-pam/linux-pam.git
 	ignore = dirty
 	shallow = true
+[submodule "ext/icu"]
+	path = ext/icu
+	url = https://github.com/unicode-org/icu.git
+	ignore = dirty
+	shallow = true

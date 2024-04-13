@@ -1,4 +1,5 @@
 crosstool-ng
+icu4c
 */root
 */.build
 */.config.old
@@ -38,3 +39,4 @@ crosstool-ng
 */libxext
 */linux-pam
 */libcups
+*/icu4c

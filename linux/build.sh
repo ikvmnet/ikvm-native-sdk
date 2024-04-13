@@ -844,6 +844,37 @@ then
 	popd
 fi
 
+# build icu4c for current platform
+if [ ! -f $sdk/icu4c/stamp ]
+then
+	mkdir -p $sdk/icu4c
+	pushd $sdk/icu4c
+	$ext/icu/icu4c/source/configure
+	make
+	touch stamp
+	popd
+fi
+
+# build icu4c
+if [ ! -f $home/icu4c/stamp ]
+then
+	mkdir -p $home/icu4c
+	pushd $home/icu4c
+	PKG_CONFIG_PATH=$dist/lib/pkgconfig:$dist/share/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	$ext/icu/icu4c/source/configure \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--with-cross-build=$sdk/icu4c \
+		$SDK_LIBICU4C_ARGS
+	make
+	make DESTDIR=$dist install
+	touch stamp
+	popd
+fi
+
 # adjust symlinks to relative paths
 symlinks -cr $dist
 
