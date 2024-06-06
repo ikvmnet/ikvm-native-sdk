@@ -1,6 +1,8 @@
 name: ikvm-native-sdk
 
 on:
+  
+  workflow_dispatch:
   push:
     branches:
     - main
