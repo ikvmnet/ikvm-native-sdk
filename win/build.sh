@@ -3,6 +3,8 @@
 xwin_version="0.6.0"
 dist="$(dirname "$0")/../dist/win"
 bin="$(dirname "$0")/bin"
+sdk_version="10.0.22621"
+crt_version="14.40.17.10"
 mkdir -p $bin
 
 case "$(uname -s)" in
@@ -17,9 +19,9 @@ curl --fail -L https://github.com/Jake-Shadle/xwin/releases/download/$xwin_versi
 # with symlinks for case-sensitive file systems
 dist="$(dirname "$0")/../dist/win"
 rm -rf $dist
-$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --include-debug-libs --preserve-ms-arch-notation --output $dist
+$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch64 --sdk-version $sdk_version --crt-version $crt_version splat --include-debug-libs --preserve-ms-arch-notation --output $dist
 
 # without symlinks for case-insensitive file systems
 dist="$(dirname "$0")/../dist/win.ci"
 rm -rf $dist
-$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch,aarch64 splat --disable-symlinks --include-debug-libs --preserve-ms-arch-notation --output $dist
+$bin/xwin --accept-license --cache-dir /tmp/xwincache --arch x86,x86_64,aarch64 --sdk-version $sdk_version --crt-version $crt_version splat --disable-symlinks --include-debug-libs --preserve-ms-arch-notation --output $dist
