@@ -342,53 +342,59 @@ then
 	popd
 fi
 
-# # build libexpat
-# if [ ! -f $home/libexpat/stamp ]
-# then
-# 	pushd $ext/libexpat/expat
-# 	./buildconf.sh
-# 	popd
+ # build libexpat
+ if [ ! -f $home/libexpat/stamp ]
+ then
+ 	pushd $ext/libexpat/expat
+ 	./buildconf.sh
+ 	popd
 
-# 	mkdir -p $home/libexpat/expat
-# 	pushd $home/libexpat
-# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
-# 	PKG_CONFIG_SYSROOT_DIR=$dist \
-# 	$ext/libexpat/expat/configure \
-# 		CFLAGS="-O0" \
-# 		--host=$SDK_TARGET \
-# 		--target=$SDK_TARGET \
-# 		--prefix="" \
-# 		--with-sysroot=$dist \
-# 		$SDK_LIBEXPAT_ARGS
-# 	make
-# 	make DESTDIR=$dist install
-# 	touch stamp
-# 	popd
-# fi
+ 	mkdir -p $home/libexpat/expat
+ 	pushd $home/libexpat
+	PKG_CONFIG_PATH=$dist/share/pkgconfig:$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CFLAGS="--sysroot=$dist -I$dist/include" \
+	CPPFLAGS="--sysroot=$dist -I$dist/include" \
+	LDFLAGS="--sysroot=$dist -L$dist/lib" \
+ 	$ext/libexpat/expat/configure \
+ 		CFLAGS="-O0" \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
+ 		$SDK_LIBEXPAT_ARGS
+ 	make
+ 	make DESTDIR=$dist install
+ 	touch stamp
+ 	popd
+ fi
 
-# # build fontconfig
-# if [ ! -f $home/fontconfig/stamp ]
-# then
-# 	pushd $ext/fontconfig
-# 	NOCONFIGURE=1 ./autogen.sh
-# 	popd
+ # build fontconfig
+ if [ ! -f $home/fontconfig/stamp ]
+ then
+ 	pushd $ext/fontconfig
+ 	NOCONFIGURE=1 ./autogen.sh
+ 	popd
 
-# 	mkdir -p $home/fontconfig
-# 	pushd $home/fontconfig
-# 	PKG_CONFIG_PATH=$dist/lib/pkgconfig \
-# 	PKG_CONFIG_SYSROOT_DIR=$dist \
-# 	$ext/fontconfig/configure \
-# 		CFLAGS="-O0" \
-# 		--host=$SDK_TARGET \
-# 		--target=$SDK_TARGET \
-# 		--prefix="" \
-# 		--with-sysroot=$dist \
-# 		$SDK_FONTCONFIG_ARGS
-# 	make
-# 	make DESTDIR=$dist install
-# 	touch stamp
-# 	popd
-# fi
+ 	mkdir -p $home/fontconfig
+ 	pushd $home/fontconfig
+	PKG_CONFIG_PATH=$dist/share/pkgconfig:$dist/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$dist \
+	CFLAGS="--sysroot=$dist -I$dist/include" \
+	CPPFLAGS="--sysroot=$dist -I$dist/include" \
+	LDFLAGS="--sysroot=$dist -L$dist/lib" \
+ 	$ext/fontconfig/configure \
+ 		CFLAGS="-O0" \
+ 		--host=$SDK_TARGET \
+ 		--target=$SDK_TARGET \
+ 		--prefix="" \
+ 		--with-sysroot=$dist \
+ 		$SDK_FONTCONFIG_ARGS
+ 	make
+ 	make DESTDIR=$dist install
+ 	touch stamp
+ 	popd
+ fi
 
 # build ALSA
 if [ ! -f $home/alsa-lib/stamp ]
