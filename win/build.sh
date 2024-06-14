@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-xwin_version="0.5.1"
+xwin_version="0.6.0"
 dist="$(dirname "$0")/../dist/win"
 bin="$(dirname "$0")/bin"
 mkdir -p $bin
