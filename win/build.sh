@@ -1,10 +1,10 @@
 #!/bin/bash -ex
 
-xwin_version="0.6.0"
+xwin_version="0.6.7"
 dist="$(dirname "$0")/../dist/win"
 bin="$(dirname "$0")/bin"
-sdk_version="10.0.22621"
-crt_version="14.40.17.10"
+sdk_version="10.0.26100"
+crt_version="14.44.17.14"
 mkdir -p $bin
 
 case "$(uname -s)" in
