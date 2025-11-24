@@ -3,7 +3,7 @@
 dist="$(dirname "$0")/../dist/osx"
 mkdir -p $dist
 
-url="https://alethicdevops.blob.core.windows.net/artifacts/MacOSX11.1.sdk.tar.xz?sv=2021-08-06&st=2023-05-11T05%3A24%3A28Z&se=2026-05-12T05%3A24%3A00Z&sr=b&sp=r&sig=jwUrA375PbpNh7oVbIIDzG7OGA8DifZxHH1Egx6LmJs%3D"
+url="https://github.com/phracker/MacOSX-SDKs/releases/download/11.0-11.1/MacOSX11.1.sdk.tar.xz"
 curl --fail -L $url | tar xJv -C $dist --strip-components=1
 
 rm -f $dist/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby
