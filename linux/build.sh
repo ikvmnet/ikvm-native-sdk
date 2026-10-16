@@ -89,31 +89,6 @@ then
 		touch stamp
 		popd
 	fi
-
-	# build GCC for distribution
-	if [ ! -f $home/gcc/stamp ]
-	then
-		# rely on built in versions of libraries
-		pushd $ext/gcc
-		./contrib/download_prerequisites
-		popd
-
-		mkdir -p $home/gcc
-		pushd $home/gcc
-		$ext/gcc/configure \
-			CFLAGS="-O0" \
-			--host=$SDK_TARGET \
-			--target=$SDK_TARGET \
-			--prefix="" \
-			--with-sysroot=$dist \
-			--with-native-system-header-dir=/include \
-			--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
-			$SDK_GCC_ARGS
-		make all-target-libgcc all-target-libstdc++-v3
-		make DESTDIR=$dist install-target-libgcc install-target-libstdc++-v3
-		touch stamp
-		popd
-	fi
 fi
 
 # SDK requires musl
@@ -137,6 +112,31 @@ then
 		touch stamp
 		popd
 	fi
+fi
+
+# build GCC runtime libraries (libgcc, libstdc++) for distribution, against whichever libc was installed above
+if [ ! -f $home/gcc/stamp ]
+then
+	# rely on built in versions of libraries
+	pushd $ext/gcc
+	./contrib/download_prerequisites
+	popd
+
+	mkdir -p $home/gcc
+	pushd $home/gcc
+	$ext/gcc/configure \
+		CFLAGS="-O0" \
+		--host=$SDK_TARGET \
+		--target=$SDK_TARGET \
+		--prefix="" \
+		--with-sysroot=$dist \
+		--with-native-system-header-dir=/include \
+		--disable-bootstrap --disable-nls --disable-multilib --enable-languages=c,c++ \
+		$SDK_GCC_ARGS
+	make all-target-libgcc all-target-libstdc++-v3
+	make DESTDIR=$dist install-target-libgcc install-target-libstdc++-v3
+	touch stamp
+	popd
 fi
 
 # build zlib
