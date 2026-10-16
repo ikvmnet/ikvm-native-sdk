@@ -124,8 +124,13 @@ then
 
 	mkdir -p $home/gcc
 	pushd $home/gcc
+	# The target libraries require the compiler itself to be built first, compiled against the target
+	# libc. musl defines NULL as nullptr in C++11, which GCC 7 sources do not compile with (bool x = NULL),
+	# so relax the compiler build only; the target libraries keep the default flags.
 	$ext/gcc/configure \
 		CFLAGS="-O0" \
+		CXXFLAGS="-g -O2 -fpermissive" \
+		CXXFLAGS_FOR_TARGET="-g -O2" \
 		--host=$SDK_TARGET \
 		--target=$SDK_TARGET \
 		--prefix="" \

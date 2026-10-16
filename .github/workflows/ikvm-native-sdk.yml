@@ -50,6 +50,7 @@ jobs:
         path: /tmp/win.ci.tar.gz
   build-linux:
     strategy:
+      fail-fast: false
       matrix:
         rid:
         - linux-x64
